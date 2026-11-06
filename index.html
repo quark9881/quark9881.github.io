@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>看剧吧-在线追剧_热门剧集推荐</title>
+<meta name="description" content="看剧吧是一个追剧主题站点，汇集热门剧集、口碑好剧与经典回顾，提供按类型与热度浏览的剧单入口，帮你快速找到想看的剧。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23131a2b'/%3E%3Crect x='12' y='18' width='40' height='28' rx='5' fill='none' stroke='%23ffcc66' stroke-width='3'/%3E%3Cpath d='M28 26l12 6-12 6z' fill='%23ffcc66'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0f1420;
+    --bg-soft:#161d2e;
+    --card:#1b2337;
+    --line:#2a3450;
+    --text:#e8ecf5;
+    --muted:#9aa6c0;
+    --gold:#ffcc66;
+    --gold-deep:#e0a83c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,-apple-system,sans-serif;
+    line-height:1.75;
+    font-size:16px;
+  }
+  a{color:inherit;text-decoration:none;}
+  img,svg{display:block;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 22px;}
+
+  /* header */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:rgba(15,20,32,.92);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);
+  }
+  .head-inner{
+    display:flex;align-items:center;justify-content:space-between;
+    gap:18px;height:66px;
+  }
+  .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:19px;letter-spacing:1px;}
+  .logo svg{width:32px;height:32px;flex:none;}
+  .logo span{color:var(--text);}
+  .logo span i{color:var(--gold);font-style:normal;}
+  nav ul{display:flex;gap:26px;list-style:none;font-size:15px;}
+  nav a{color:var(--muted);transition:color .2s;}
+  nav a:hover,nav a:focus{color:var(--gold);}
+  .nav-cta{
+    display:inline-flex;align-items:center;gap:6px;
+    background:var(--gold);color:#1a1206;font-weight:600;
+    padding:7px 16px;border-radius:999px;font-size:14px;white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--gold-deep);}
+
+  /* hero */
+  .hero{
+    position:relative;overflow:hidden;
+    padding:64px 0 52px;
+    background:
+      radial-gradient(ellipse at 78% 12%,rgba(255,204,102,.16),transparent 55%),
+      radial-gradient(ellipse at 8% 88%,rgba(78,120,255,.14),transparent 55%),
+      var(--bg);
+    border-bottom:1px solid var(--line);
+  }
+  .hero-grid{
+    display:grid;grid-template-columns:1.25fr .75fr;gap:44px;align-items:center;
+  }
+  .tag{
+    display:inline-block;font-size:13px;color:var(--gold);
+    border:1px solid rgba(255,204,102,.4);
+    padding:3px 12px;border-radius:999px;margin-bottom:18px;
+    letter-spacing:1px;
+  }
+  h1{
+    font-size:clamp(30px,4.4vw,46px);
+    line-height:1.25;font-weight:800;letter-spacing:2px;
+    margin-bottom:16px;
+  }
+  h1 em{font-style:normal;color:var(--gold);}
+  .hero p.lead{color:var(--muted);font-size:16.5px;max-width:34em;margin-bottom:26px;}
+  .hero-actions{display:flex;flex-wrap:wrap;gap:14px;}
+  .btn{
+    display:inline-flex;align-items:center;gap:8px;
+    padding:11px 24px;border-radius:10px;font-weight:600;font-size:15px;
+    transition:transform .15s,background .2s;
+  }
+  .btn-primary{background:var(--gold);color:#1a1206;}
+  .btn-primary:hover{background:var(--gold-deep);transform:translateY(-1px);}
+  .btn-ghost{border:1px solid var(--line);color:var(--text);background:rgba(255,255,255,.03);}
+  .btn-ghost:hover{border-color:var(--gold);color:var(--gold);}
+  .hero-art{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:18px;
+    padding:22px;box-shadow:0 22px 50px -28px rgba(0,0,0,.9);
+  }
+  .hero-art .screen{
+    border-radius:12px;overflow:hidden;background:#0b1020;border:1px solid var(--line);
+  }
+  .hero-art .screen svg{width:100%;height:auto;}
+  .hero-art .bar{display:flex;gap:7px;padding:10px 4px 0;}
+  .hero-art .bar i{width:8px;height:8px;border-radius:50%;background:#33405e;display:block;}
+  .hero-art .meta{display:flex;justify-content:space-between;font-size:12.5px;color:var(--muted);margin-top:12px;}
+
+  /* section base */
+  section{padding:58px 0;}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:20px;margin-bottom:28px;flex-wrap:wrap;}
+  h2{font-size:24px;font-weight:700;letter-spacing:1px;}
+  h2::before{
+    content:"";display:inline-block;width:6px;height:20px;border-radius:3px;
+    background:var(--gold);margin-right:11px;vertical-align:-2px;
+  }
+  .sec-head p{color:var(--muted);font-size:14.5px;max-width:36em;}
+
+  /* picks */
+  .picks{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .card{
+    background:var(--card);border:1px solid var(--line);border-radius:14px;
+    padding:22px;display:flex;flex-direction:column;gap:10px;
+    transition:border-color .2s,transform .2s;
+  }
+  .card:hover{border-color:rgba(255,204,102,.5);transform:translateY(-3px);}
+  .card .num{font-size:13px;color:var(--gold);letter-spacing:2px;font-weight:600;}
+  .card h3{font-size:18px;font-weight:700;}
+  .card p{font-size:14.5px;color:var(--muted);flex:1;}
+  .card .tags{display:flex;gap:8px;flex-wrap:wrap;font-size:12px;color:var(--muted);}
+  .card .tags span{border:1px solid var(--line);padding:1px 9px;border-radius:999px;}
+
+  /* filter */
+  .filter-panel{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:16px;
+    padding:24px;display:grid;grid-template-columns:1fr 1fr;gap:22px;
+  }
+  .filter-panel h3{font-size:16px;margin-bottom:12px;}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;}
+  .chip{
+    background:var(--card);border:1px solid var(--line);color:var(--muted);
+    padding:6px 14px;border-radius:999px;font-size:13.5px;cursor:pointer;
+    font-family:inherit;transition:all .18s;
+  }
+  .chip:hover{border-color:var(--gold);color:var(--gold);}
+  .chip.active{background:var(--gold);border-color:var(--gold);color:#1a1206;font-weight:600;}
+  .filter-bar{
+    display:flex;gap:12px;margin-top:18px;flex-wrap:wrap;align-items:center;
+  }
+  .filter-bar input[type="search"]{
+    flex:1;min-width:200px;background:var(--card);border:1px solid var(--line);
+    color:var(--text);border-radius:10px;padding:10px 15px;font-size:14.5px;font-family:inherit;
+  }
+  .filter-bar input[type="search"]:focus{outline:none;border-color:var(--gold);}
+  .filter-bar input::placeholder{color:#67728c;}
+  .count{font-size:13.5px;color:var(--muted);white-space:nowrap;}
+
+  /* list */
+  .list{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:26px;}
+  .item{
+    background:var(--card);border:1px solid var(--line);border-radius:12px;
+    padding:18px 20px;display:flex;gap:16px;align-items:flex-start;
+    transition:border-color .2s;
+  }
+  .item:hover{border-color:rgba(255,204,102,.45);}
+  .item .badge{
+    flex:none;width:46px;height:46px;border-radius:11px;
+    background:rgba(255,204,102,.12);border:1px solid rgba(255,204,102,.35);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .item .badge svg{width:24px;height:24px;}
+  .item h4{font-size:16.5px;margin-bottom:4px;}
+  .item p{font-size:14px;color:var(--muted);}
+  .item .meta{font-size:12.5px;color:#7f8ba6;margin-top:7px;display:flex;gap:12px;flex-wrap:wrap;}
+  .empty{
+    grid-column:1/-1;text-align:center;color:var(--muted);
+    padding:34px;border:1px dashed var(--line);border-radius:12px;font-size:14.5px;
+  }
+
+  /* guide */
+  .guide-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .guide-grid article{
+    background:var(--bg-soft);border:1px solid var(--line);border-radius:14px;padding:22px;
+  }
+  .guide-grid article h3{font-size:16.5px;margin-bottom:9px;color:var(--gold);}
+  .guide-grid article p{font-size:14.5px;color:var(--muted);}
+
+  /* download */
+  .dl{
+    display:flex;align-items:center;justify-content:space-between;gap:22px;
+    background:linear-gradient(120deg,rgba(255,204,102,.13),rgba(78,120,255,.1));
+    border:1px solid var(--line);border-radius:16px;padding:26px 28px;flex-wrap:wrap;
+  }
+  .dl h3{font-size:19px;margin-bottom:6px;}
+  .dl p{font-size:14.5px;color:var(--muted);max-width:38em;}
+  .dl-btn{
+    background:var(--gold);color:#1a1206;font-weight:700;
+    padding:11px 26px;border-radius:10px;font-size:15px;white-space:nowrap;
+    pointer-events:none;
+  }
+
+  /* footer */
+  footer{
+    border-top:1px solid var(--line);background:var(--bg-soft);
+    padding:34px 0 26px;margin-top:20px;font-size:13.5px;color:var(--muted);
+  }
+  .foot-inner{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;}
+  .foot-brand{display:flex;align-items:center;gap:9px;color:var(--text);font-weight:600;font-size:15px;}
+  .foot-brand svg{width:24px;height:24px;}
+  .foot-links{display:flex;gap:20px;flex-wrap:wrap;}
+  .foot-links a:hover{color:var(--gold);}
+  .foot-note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;line-height:1.9;}
+
+  @media (max-width:900px){
+    .hero-grid{grid-template-columns:1fr;gap:32px;}
+    .picks,.guide-grid{grid-template-columns:1fr;}
+    .list{grid-template-columns:1fr;}
+    .filter-panel{grid-template-columns:1fr;}
+  }
+  @media (max-width:680px){
+    .head-inner{height:auto;padding:12px 0;flex-wrap:wrap;}
+    nav ul{gap:15px;font-size:14px;flex-wrap:wrap;}
+    .nav-cta{display:none;}
+    .hero{padding:42px 0 38px;}
+    section{padding:42px 0;}
+    h1{letter-spacing:1px;}
+    .dl{padding:22px;}
+  }
+</style>
+    <script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="wrap head-inner">
+    <a href="#top" class="logo" aria-label="看剧吧 首页">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#1b2337"/>
+        <rect x="11" y="18" width="42" height="28" rx="5" fill="none" stroke="#ffcc66" stroke-width="3"/>
+        <path d="M28 26l12 6-12 6z" fill="#ffcc66"/>
+      </svg>
+      <span>看剧< i>吧</i></span>
+    </a>
+    <nav aria-label="主导航">
+      <ul>
+        <li><a href="#picks">本周精选</a></li>
+        <li><a href="#browse">按类型找剧</a></li>
+        <li><a href="#tips">追剧小贴士</a></li>
+        <li><a href="#download">剧单下载</a></li>
+      </ul>
+    </nav>
+    <a class="nav-cta" href="#browse">开始找剧</a>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tag">追剧 · 选剧 · 剧单</span>
+        <h1>看剧吧</h1>
+        <p class="lead">看剧吧把近期热门剧集、口碑好剧和经典回顾放在同一张清单上。你可以按类型筛选、按关键词搜索，也可以先看本周精选，再决定今晚看什么。选剧这件事，交给看剧吧来简化。</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#browse">按类型找剧 →</a>
+          <a class="btn btn-ghost" href="#picks">查看本周精选</a>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="bar"><i></i><i></i><i></i></div>
+        <div class="screen">
+          <svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="播放界面示意图">
+            <rect width="320" height="180" fill="#0b1020"/>
+            <circle cx="160" cy="90" r="34" fill="none" stroke="#ffcc66" stroke-width="2.5" opacity=".85"/>
+            <path d="M150 76l26 14-26 14z" fill="#ffcc66"/>
+            <rect x="0" y="150" width="320" height="4" fill="#1b2337"/>
+            <rect x="0" y="150" width="186" height="4" fill="#ffcc66"/>
+            <text x="16" y="30" fill="#5c6a8a" font-size="11" font-family="sans-serif">正在播放</text>
+            <text x="16" y="172" fill="#5c6a8a" font-size="10" font-family="sans-serif">42:18 / 45:00</text>
+          </svg>
+        </div>
+        <div class="meta"><span>今晚看什么</span><span>看剧吧 · 剧单</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PICKS -->
+  <section id="picks">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>本周精选</h2>
+        <p>从近期讨论度较高的剧集里挑出三部，分别覆盖悬疑、都市和古装三种口味。看剧吧的建议是：先定类型，再定集数，追起来更轻松。</p>
+      </div>
+      <div class="picks">
+        <div class="card">
+          <span class="num">01 / 悬疑</span>
+          <h3>短集数悬疑剧</h3>
+          <p>每集四十五分钟左右，主线清晰，适合连续两三个晚上看完。悬疑剧的关键在于信息节奏，集数少反而更容易保持悬念，不容易中途弃剧。</p>
+          <div class="tags"><span>强主线</span><span>易入坑</span></div>
+        </div>
+        <div class="card">
+          <span class="num">02 / 都市</span>
+          <h3>都市生活群像</h3>
+          <p>人物多、话题贴近日常，适合边吃饭边看。群像剧的好处是每条支线都能单独成立，错过一两集也不影响理解主线走向。</p>
+          <div class="tags"><span>轻松</span><span>群像</span></div>
+        </div>
+        <div class="card">
+          <span class="num">03 / 古装</span>
+          <h3>古装长线叙事</h3>
+          <p>世界观铺得开，前期需要一点耐心。看剧吧提醒，这类剧适合周末整块时间观看，碎片化追剧容易漏掉铺垫的伏笔。</p>
+          <div class="tags"><span>长线</span><span>重铺垫</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BROWSE / FILTER -->
+  <section id="browse">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>按类型找剧</h2>
+        <p>先选类型，再用关键词缩小范围。下面的剧单条目可以实时筛选，输入剧名或标签里的字都能匹配到结果。</p>
+      </div>
+
+      <div class="filter-panel">
+        <div>
+          <h3>类型</h3>
+          <div class="chips" id="typeChips" role="group" aria-label="按类型筛选">
+            <button class="chip active" data-type="全部">全部</button>
+            <button class="chip" data-type="悬疑">悬疑</button>
+            <button class="chip" data-type="都市">都市</button>
+            <button class="chip" data-type="古装">古装</button>
+            <button class="chip" data-type="喜剧">喜剧</button>
+          </div>
+        </div>
+        <div>
+          <h3>观看节奏</h3>
+          <div class="chips" role="group" aria-label="按节奏筛选">
+            <button class="chip active" data-pace="全部">不限</button>
+            <button class="chip" data-pace="短集数">短集数</button>
+            <button class="chip" data-pace="长线">长线</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="search" id="searchInput" placeholder="输入剧名、标签或关键词，例如：悬疑" aria-label="搜索剧单">
+        <span class="count" id="resultCount">共 6 部</span>
+      </div>
+
+      <div class="list" id="dramaList">
+        <article class="item" data-type="悬疑" data-pace="短集数" data-key="迷雾档案 悬疑 短集数 推理">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M16.5 16.5L21 21"/></svg>
+          </div>
+          <div>
+            <h4>迷雾档案</h4>
+            <p>一桩旧案牵出新的线索，主角在有限集数里完成真相拼图。适合喜欢推理、不愿拖沓的观众。</p>
+            <div class="meta"><span>悬疑</span><span>短集数</span><span>强主线</span></div>
+          </div>
+        </article>
+
+        <article class="item" data-type="都市" data-pace="短集数" data-key="楼下有风 都市 生活 群像 轻松">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/></svg>
+          </div>
+          <div>
+            <h4>楼下有风</h4>
+            <p>以小区邻里为背景的生活剧，几户人家的日常交织在一起。节奏轻，适合下班后放松看。</p>
+            <div class="meta"><span>都市</span><span>群像</span><span>轻松</span></div>
+          </div>
+        </article>
+
+        <article class="item" data-type="古装" data-pace="长线" data-key="长安旧梦 古装 长线 权谋 铺垫">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><path d="M4 21V8l8-5 8 5v13"/><path d="M9 21v-6h6v6"/></svg>
+          </div>
+          <div>
+            <h4>长安旧梦</h4>
+            <p>权谋线层层推进，前几集人物关系密集。看剧吧建议周末一次看三到四集，更容易记住人物。</p>
+            <div class="meta"><span>古装</span><span>长线</span><span>重铺垫</span></div>
+          </div>
+        </article>
+
+        <article class="item" data-type="喜剧" data-pace="短集数" data-key="合租时代 喜剧 短集数 轻松 下饭">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><path d="M9 9h.01M15 9h.01"/></svg>
+          </div>
+          <div>
+            <h4>合租时代</h4>
+            <p>情景喜剧结构，单集独立成篇，跳着看也不影响理解。适合吃饭时间随手播放。</p>
+            <div class="meta"><span>喜剧</span><span>短集数</span><span>下饭</span></div>
+          </div>
+        </article>
+
+        <article class="item" data-type="悬疑" data-pace="长线" data-key="海岸线 悬疑 长线 氛围 慢热">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><path d="M2 18c3-2 5 2 8 0s5 2 8 0 4 1 4 1"/><circle cx="12" cy="8" r="4"/></svg>
+          </div>
+          <div>
+            <h4>海岸线</h4>
+            <p>氛围向悬疑，前段偏慢热，靠场景和留白积累张力。喜欢沉浸感的观众会更受用。</p>
+            <div class="meta"><span>悬疑</span><span>长线</span><span>慢热</span></div>
+          </div>
+        </article>
+
+        <article class="item" data-type="都市" data-pace="长线" data-key="晚班地铁 都市 长线 职场 人物">
+          <div class="badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffcc66" stroke-width="1.8" aria-hidden="true"><rect x="4" y="3" width="16" height="14" rx="3"/><path d="M8 21l2-4M16 21l-2-4"/><path d="M8 9h8"/></svg>
+          </div>
+          <div>
+            <h4>晚班地铁</h4>
+            <p>聚焦夜班工作者群像，人物关系逐步展开。集数较多，适合当作长期追更的日常剧。</p>
+            <div class="meta"><span>都市</span><span>长线</span><span>职场</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIPS -->
+  <section id="tips">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>追剧小贴士</h2>
+        <p>同样是追剧，方法不同，体验差别很大。看剧吧总结了三条实用建议，帮你少走弯路。</p>
+      </div>
+      <div class="guide-grid">
+        <article>
+          <h3>先看集数与单集时长</h3>
+          <p>短集数剧集适合有整块时间的晚上，长线剧集更适合分摊到一两周。看剧吧建议先确认总时长，再决定是否入坑，避免看到一半发现时间不够。</p>
+        </article>
+        <article>
+          <h3>用类型锁定心情</h3>
+          <p>想放松就选喜剧和都市生活，想专注就选悬疑。把“今天的心情”对应到类型上，比漫无目的翻列表高效得多，也更容易坚持看完。</p>
+        </article>
+        <article>
+          <h3>剧单比零散收藏更管用</h3>
+          <p>把想看的剧按类型整理成清单，看剧吧上的筛选结果可以直接当作剧单使用。一次选三部左右，看完再补充，避免收藏夹越堆越多。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOWNLOAD -->
+  <section id="download">
+    <div class="wrap">
+      <div class="dl">
+        <div>
+          <h3>下载看剧吧剧单</h3>
+          <p>把本周精选与按类型筛选的剧单打包带走，方便离线查看。当前版本支持悬疑、都市、古装、喜剧四类共六部的条目整理。</p>
+        </div>
+        <a class="dl-btn" href="#" data-download-placeholder="true" aria-disabled="true" tabindex="-1">下载</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-inner">
+      <div class="foot-brand">
+        <svg viewBox="0 0 64 64" aria-hidden="true">
+          <rect width="64" height="64" rx="14" fill="#1b2337"/>
+          <rect x="11" y="18" width="42" height="28" rx="5" fill="none" stroke="#ffcc66" stroke-width="3"/>
+          <path d="M28 26l12 6-12 6z" fill="#ffcc66"/>
+        </svg>
+        <span>看剧吧</span>
+      </div>
+      <div class="foot-links">
+        <a href="#picks">本周精选</a>
+        <a href="#browse">按类型找剧</a>
+        <a href="#tips">追剧小贴士</a>
+        <a href="#download">剧单下载</a>
+      </div>
+    </div>
+    <p class="foot-note">看剧吧是一个追剧主题的内容站点，剧单条目用于展示选剧方向与筛选方式，不提供剧集播放。页面中的类型、节奏与标签描述均为站内条目整理，具体剧集信息以各平台页面为准。</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var list = document.getElementById('dramaList');
+  var items = Array.prototype.slice.call(list.querySelectorAll('.item'));
+  var search = document.getElementById('searchInput');
+  var countEl = document.getElementById('resultCount');
+  var type = '全部', pace = '全部';
+
+  var typeChips = document.querySelectorAll('#typeChips .chip');
+  var paceChips = document.querySelectorAll('[data-pace].chip, .chips .chip[data-pace]');
+
+  Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.chip[data-type]'), function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      type = btn.getAttribute('data-type');
+      apply();
+    });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll('.chip[data-pace]'), function(btn){
+    btn.addEventListener('click', function(){
+      Array.prototype.forEach.call(document.querySelectorAll('.chip[data-pace]'), function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      pace = btn.getAttribute('data-pace');
+      apply();
+    });
+  });
+
+  search.addEventListener('input', apply);
+
+  function apply(){
+    var q = search.value.trim().toLowerCase();
+    var visible = 0;
+    items.forEach(function(el){
+      var t = el.getAttribute('data-type');
+      var p = el.getAttribute('data-pace');
+      var k = (el.getAttribute('data-key') + ' ' + el.textContent).toLowerCase();
+      var ok = (type === '全部' || t === type) && (pace === '全部' || p === pace) && (q === '' || k.indexOf(q) > -1);
+      el.style.display = ok ? '' : 'none';
+      if(ok) visible++;
+    });
+    var old = list.querySelector('.empty');
+    if(visible === 0){
+      if(!old){
+        var d = document.createElement('div');
+        d.className = 'empty';
+        d.textContent = '没有匹配的剧单条目，换个关键词或切换类型再试试。';
+        list.appendChild(d);
+      }
+    } else if(old){
+      old.remove();
+    }
+    countEl.textContent = '共 ' + visible + ' 部';
+  }
+})();
+</script>
+</body>
+</html>
