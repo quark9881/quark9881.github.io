@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>91次元浏览器-次元资源浏览_多标签页面管理_轻量快速启动</title>
+<meta name="description" content="91次元浏览器面向喜欢二次元与次元内容的访问者，提供多标签浏览、分栏管理、快速搜索与轻量启动体验，帮助高效浏览次元资源站点与日常网页内容。">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23151a33'/%3E%3Ccircle cx='32' cy='32' r='17' fill='none' stroke='%2364e0ff' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='6' fill='%23ff6fb5'/%3E%3Ccircle cx='46' cy='18' r='4' fill='%23ffd166'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#0e1020;
+  --bg-soft:#151a33;
+  --card:#1b2140;
+  --line:#2b3360;
+  --text:#eef1ff;
+  --muted:#a7afd4;
+  --cyan:#64e0ff;
+  --pink:#ff6fb5;
+  --gold:#ffd166;
+  --radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  background:var(--bg);
+  color:var(--text);
+  font-family:"PingFang SC","Microsoft YaHei","Hiragino Sans GB",system-ui,-apple-system,"Segoe UI",sans-serif;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:inherit;text-decoration:none}
+img,svg{display:block;max-width:100%}
+.wrap{width:min(1120px,92vw);margin:0 auto}
+
+/* header */
+header.site{
+  position:sticky;top:0;z-index:50;
+  background:rgba(14,16,32,.86);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 0;flex-wrap:wrap}
+.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.12rem;letter-spacing:.5px}
+.logo .mark{width:34px;height:34px;flex:0 0 auto}
+.logo span{background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+nav.links{display:flex;gap:6px;flex-wrap:wrap}
+nav.links a{
+  font-size:.9rem;color:var(--muted);padding:7px 12px;border-radius:999px;
+  transition:.2s;border:1px solid transparent;
+}
+nav.links a:hover,nav.links a:focus-visible{color:var(--text);border-color:var(--line);background:var(--bg-soft)}
+
+/* hero */
+.hero{padding:56px 0 44px;position:relative;overflow:hidden}
+.hero::before{
+  content:"";position:absolute;inset:-40% -10% auto auto;width:520px;height:520px;
+  background:radial-gradient(circle,rgba(100,224,255,.18),transparent 62%);
+  pointer-events:none;
+}
+.hero::after{
+  content:"";position:absolute;inset:auto auto -50% -15%;width:460px;height:460px;
+  background:radial-gradient(circle,rgba(255,111,181,.16),transparent 62%);
+  pointer-events:none;
+}
+.hero-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center;position:relative;z-index:1}
+.tagline{
+  display:inline-flex;align-items:center;gap:8px;font-size:.8rem;color:var(--cyan);
+  border:1px solid rgba(100,224,255,.35);border-radius:999px;padding:5px 14px;margin-bottom:18px;
+  background:rgba(100,224,255,.07);
+}
+h1{
+  font-size:clamp(1.9rem,4.4vw,3rem);line-height:1.2;font-weight:800;letter-spacing:.5px;
+  margin-bottom:18px;
+}
+h1 em{font-style:normal;background:linear-gradient(90deg,var(--cyan),var(--pink));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{color:var(--muted);font-size:1rem;max-width:36em;margin-bottom:26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;font-size:.95rem;font-weight:600;
+  padding:12px 24px;border-radius:999px;transition:.2s;border:1px solid transparent;
+}
+.btn.primary{background:linear-gradient(90deg,var(--cyan),var(--pink));color:#0b0d1a}
+.btn.primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn.ghost{border-color:var(--line);color:var(--text);background:var(--bg-soft)}
+.btn.ghost:hover{border-color:var(--cyan);color:var(--cyan)}
+.btn[aria-disabled="true"]{opacity:.55;cursor:not-allowed;pointer-events:none}
+.hero-art{position:relative}
+.hero-art svg{width:100%;height:auto}
+.stat-row{display:flex;gap:28px;margin-top:34px;flex-wrap:wrap}
+.stat b{display:block;font-size:1.35rem;color:var(--cyan);font-weight:800}
+.stat span{font-size:.82rem;color:var(--muted)}
+
+/* section base */
+section.block{padding:44px 0;border-top:1px solid var(--line)}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}
+.sec-head h2{font-size:1.42rem;font-weight:800;letter-spacing:.3px}
+.sec-head h2 .dot{color:var(--pink)}
+.sec-head p{color:var(--muted);font-size:.9rem;max-width:40em}
+
+/* feature cards */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
+  padding:22px;transition:.2s;
+}
+.card:hover{border-color:rgba(100,224,255,.45);transform:translateY(-2px)}
+.card .ico{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:rgba(100,224,255,.1);margin-bottom:14px}
+.card h3{font-size:1.02rem;margin-bottom:8px;font-weight:700}
+.card p{font-size:.88rem;color:var(--muted)}
+
+/* workflow list */
+.flow{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:step}
+.flow .step{
+  background:var(--bg-soft);border:1px solid var(--line);border-radius:var(--radius);padding:20px;
+  position:relative;
+}
+.flow .step::before{
+  counter-increment:step;content:"0" counter(step);
+  font-size:.78rem;font-weight:800;color:var(--gold);letter-spacing:1px;
+}
+.flow .step h3{font-size:.98rem;margin:8px 0 6px}
+.flow .step p{font-size:.85rem;color:var(--muted)}
+
+/* scene table */
+.scene{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.scene .item{
+  display:flex;gap:14px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--radius);padding:18px;
+}
+.scene .item .bar{width:4px;border-radius:4px;background:linear-gradient(180deg,var(--cyan),var(--pink));flex:0 0 auto}
+.scene .item h3{font-size:.98rem;margin-bottom:5px}
+.scene .item p{font-size:.86rem;color:var(--muted)}
+
+/* faq */
+.faq{display:grid;gap:12px}
+details{
+  background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 18px;
+}
+details summary{cursor:pointer;font-weight:600;font-size:.95rem;list-style:none}
+details summary::-webkit-details-marker{display:none}
+details summary::after{content:"+";float:right;color:var(--cyan);font-weight:700}
+details[open] summary::after{content:"−"}
+details p{font-size:.88rem;color:var(--muted);margin-top:10px}
+
+/* download strip */
+.dl-strip{
+  background:linear-gradient(135deg,rgba(100,224,255,.1),rgba(255,111,181,.1));
+  border:1px solid var(--line);border-radius:var(--radius);
+  padding:28px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+}
+.dl-strip h2{font-size:1.2rem;margin-bottom:6px}
+.dl-strip p{font-size:.88rem;color:var(--muted)}
+.dl-strip .btn[aria-disabled="true"]{background:linear-gradient(90deg,var(--cyan),var(--pink));color:#0b0d1a;opacity:.6}
+
+/* footer */
+footer.site{border-top:1px solid var(--line);padding:30px 0 40px;margin-top:20px}
+.foot{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap;align-items:center}
+.foot .brand{font-weight:700;font-size:.95rem}
+.foot p{font-size:.8rem;color:var(--muted)}
+.foot nav{display:flex;gap:16px;flex-wrap:wrap}
+.foot nav a{font-size:.82rem;color:var(--muted)}
+.foot nav a:hover{color:var(--cyan)}
+
+@media (max-width:900px){
+  .hero-grid{grid-template-columns:1fr;gap:28px}
+  .hero-art{max-width:420px;margin:0 auto}
+  .grid3{grid-template-columns:1fr 1fr}
+  .flow{grid-template-columns:1fr 1fr}
+  .scene{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .grid3,.flow{grid-template-columns:1fr}
+  .hero{padding:36px 0 30px}
+  .stat-row{gap:18px}
+  .dl-strip{padding:22px}
+  nav.links a{padding:6px 9px;font-size:.84rem}
+}
+</style>
+    <script type="text/javascript" src="https://cdn.bdwgg.com/mh.js"></script>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="logo" href="#top" aria-label="91次元浏览器 首页">
+      <svg class="mark" viewBox="0 0 64 64" aria-hidden="true">
+        <rect width="64" height="64" rx="14" fill="#151a33"/>
+        <circle cx="32" cy="32" r="17" fill="none" stroke="#64e0ff" stroke-width="3"/>
+        <circle cx="32" cy="32" r="6" fill="#ff6fb5"/>
+        <circle cx="46" cy="18" r="4" fill="#ffd166"/>
+      </svg>
+      <span>91次元浏览器</span>
+    </a>
+    <nav class="links" aria-label="主导航">
+      <a href="#features">浏览特性</a>
+      <a href="#flow">使用流程</a>
+      <a href="#scenes">适用场景</a>
+      <a href="#faq">常见问题</a>
+      <a href="#download">获取安装</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="tagline">次元内容 · 轻量浏览</span>
+        <h1>91次元浏览器</h1>
+        <p class="lead">91次元浏览器是一款围绕次元内容浏览习惯设计的浏览器工具，把多标签页、分栏视图与快速搜索放在同一个界面里。打开它，你可以同时保留多个次元资源页面，在标签之间来回切换时不丢失进度。</p>
+        <div class="cta">
+          <a class="btn primary" href="#download">下载安装</a>
+          <a class="btn ghost" href="#features">查看浏览特性</a>
+        </div>
+        <div class="stat-row">
+          <div class="stat"><b>多标签</b><span>并排浏览次元站点</span></div>
+          <div class="stat"><b>分栏</b><span>左右对照阅读</span></div>
+          <div class="stat"><b>轻量</b><span>启动与切换更省心</span></div>
+        </div>
+      </div>
+      <div class="hero-art" aria-hidden="true">
+        <svg viewBox="0 0 360 300" role="img">
+          <defs>
+            <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#64e0ff"/><stop offset="1" stop-color="#ff6fb5"/>
+            </linearGradient>
+          </defs>
+          <rect x="24" y="34" width="312" height="212" rx="16" fill="#1b2140" stroke="#2b3360"/>
+          <rect x="24" y="34" width="312" height="34" rx="16" fill="#232b52"/>
+          <circle cx="46" cy="51" r="5" fill="#ff6fb5"/>
+          <circle cx="64" cy="51" r="5" fill="#ffd166"/>
+          <circle cx="82" cy="51" r="5" fill="#64e0ff"/>
+          <rect x="44" y="86" width="120" height="10" rx="5" fill="url(#g1)" opacity=".85"/>
+          <rect x="44" y="108" width="176" height="8" rx="4" fill="#2b3360"/>
+          <rect x="44" y="126" width="150" height="8" rx="4" fill="#2b3360"/>
+          <rect x="44" y="156" width="86" height="60" rx="10" fill="#252d55"/>
+          <rect x="142" y="156" width="86" height="60" rx="10" fill="#252d55"/>
+          <rect x="240" y="156" width="66" height="60" rx="10" fill="#252d55"/>
+          <circle cx="292" cy="86" r="18" fill="none" stroke="#ffd166" stroke-width="3" opacity=".8"/>
+          <circle cx="292" cy="86" r="6" fill="#ffd166"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="features">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>浏览特性<span class="dot">.</span></h2>
+        <p>91次元浏览器把次元资源站点的浏览动作拆成几件具体的事：开页、留存、切换与查找。</p>
+      </div>
+      <div class="grid3">
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64e0ff" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="18" height="16" rx="3"/><path d="M3 9h18M8 4v5"/></svg>
+          </div>
+          <h3>多标签浏览</h3>
+          <p>一次打开多个次元页面，标签栏集中管理，关闭前不会误丢正在看的内容。标签数量较多时也能按需收起。</p>
+        </article>
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff6fb5" stroke-width="1.9" stroke-linecap="round"><rect x="3" y="4" width="8" height="16" rx="2"/><rect x="13" y="4" width="8" height="16" rx="2"/></svg>
+          </div>
+          <h3>分栏对照</h3>
+          <p>左右两栏并排显示，适合一边看目录一边看详情，或将同一次元主题的两个页面放在同一屏里比较。</p>
+        </article>
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="1.9" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg>
+          </div>
+          <h3>快速搜索</h3>
+          <p>地址栏直接输入关键词即可检索，减少在页面之间来回跳转的次数，查找次元站点的过程更短。</p>
+        </article>
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#64e0ff" stroke-width="1.9" stroke-linecap="round"><path d="M4 12a8 8 0 1 1 2.4 5.7"/><path d="M4 19v-5h5"/></svg>
+          </div>
+          <h3>会话恢复</h3>
+          <p>意外关闭后重新打开，可继续上一次的标签组合，不必逐个重新寻找此前浏览的次元页面。</p>
+        </article>
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ff6fb5" stroke-width="1.9" stroke-linecap="round"><path d="M4 17l5-6 4 4 7-9"/><path d="M4 21h16"/></svg>
+          </div>
+          <h3>轻量启动</h3>
+          <p>91次元浏览器在启动环节保持克制，减少等待时间，让打开浏览器的动作回到打开本身。</p>
+        </article>
+        <article class="card">
+          <div class="ico">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#ffd166" stroke-width="1.9" stroke-linecap="round"><path d="M12 3l2.6 5.6 6.1.8-4.5 4.2 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.4l6.1-.8z"/></svg>
+          </div>
+          <h3>常用站点收藏</h3>
+          <p>把常去的次元站点放进收藏区，以固定入口方式呈现，不必每次重新输入地址。</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="flow">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>使用流程<span class="dot">.</span></h2>
+        <p>从安装到日常浏览，91次元浏览器的使用路径可以按四步理解。</p>
+      </div>
+      <div class="flow">
+        <div class="step">
+          <h3>获取安装</h3>
+          <p>通过页面下载入口取得安装文件，按系统提示完成安装，首次启动时按引导完成基础设置。</p>
+        </div>
+        <div class="step">
+          <h3>整理入口</h3>
+          <p>把常看的次元站点加入收藏，命名清晰，后续从收藏区直接进入，减少重复输入。</p>
+        </div>
+        <div class="step">
+          <h3>分栏浏览</h3>
+          <p>需要对照时开启分栏，把目录页与内容页并排放置，滚动与切换互不打断。</p>
+        </div>
+        <div class="step">
+          <h3>留存进度</h3>
+          <p>关闭前保留标签组合，下次打开91次元浏览器即可继续，浏览节奏不被打断。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="scenes">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>适用场景<span class="dot">.</span></h2>
+        <p>次元内容的浏览往往需要在多个页面之间来回确认，以下场景是91次元浏览器常见的用法。</p>
+      </div>
+      <div class="scene">
+        <div class="item">
+          <div class="bar"></div>
+          <div>
+            <h3>追更与目录对照</h3>
+            <p>目录页放在左栏，内容页放在右栏，更新后直接定位，不必在两屏之间反复切换。</p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="bar"></div>
+          <div>
+            <h3>多站点并行比较</h3>
+            <p>同一主题在不同次元站点上的呈现各有差异，并排打开后可以快速比对信息是否一致。</p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="bar"></div>
+          <div>
+            <h3>资料收集与整理</h3>
+            <p>浏览过程中把待读页面留在标签栏，集中处理，避免临时找页打断思路。</p>
+          </div>
+        </div>
+        <div class="item">
+          <div class="bar"></div>
+          <div>
+            <h3>日常网页使用</h3>
+            <p>除次元内容外，也可承担搜索、阅读与轻办公等常规浏览任务，一器多用。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="faq">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2>常见问题<span class="dot">.</span></h2>
+        <p>关于91次元浏览器的几个基础问题，回答仅针对页面已说明的功能范围。</p>
+      </div>
+      <div class="faq">
+        <details open>
+          <summary>91次元浏览器适合哪些人使用？</summary>
+          <p>适合经常浏览次元内容、需要在多个页面之间对照阅读的访问者；也适合希望用一个轻量浏览器承担日常搜索与阅读需求的人。</p>
+        </details>
+        <details>
+          <summary>分栏功能会不会影响标签数量？</summary>
+          <p>分栏是在同一窗口内并排显示两个页面，标签栏仍按原方式管理。开启分栏后，可在两栏之间切换焦点，标签数量不受限制。</p>
+        </details>
+        <details>
+          <summary>关闭浏览器后，之前的页面还能找回吗？</summary>
+          <p>会话恢复用于继续上一次的标签组合。若在关闭前保留了标签，重新打开91次元浏览器时可按提示恢复，无需逐个重新打开。</p>
+        </details>
+        <details>
+          <summary>安装文件从哪里获取？</summary>
+          <p>页面底部的获取安装区域提供下载入口，点击后按系统提示完成安装即可。具体版本与系统要求以安装包内说明为准。</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="download">
+    <div class="wrap">
+      <div class="dl-strip">
+        <div>
+          <h2>获取91次元浏览器</h2>
+          <p>下载安装包后按提示完成安装，首次启动即可配置收藏与分栏。91次元浏览器的使用以实际安装版本为准。</p>
+        </div>
+        <a class="btn primary" href="#" data-download-placeholder="true" aria-disabled="true" tabindex="-1">下载</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site">
+  <div class="wrap foot">
+    <div>
+      <div class="brand">91次元浏览器</div>
+      <p>次元内容浏览与多标签页面管理的轻量工具。</p>
+    </div>
+    <nav aria-label="页尾导航">
+      <a href="#features">浏览特性</a>
+      <a href="#flow">使用流程</a>
+      <a href="#scenes">适用场景</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+    <p>© 91次元浏览器 · 页面内容以实际安装版本为准</p>
+  </div>
+</footer>
+
+</body>
+</html>
